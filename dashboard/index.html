@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Launch Radar — token launch radar</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="top">
+  <div>
+    <h1>Launch Radar</h1>
+    <p class="sub">Pre-token protocols, ranked by implied value — value if it launches × token odds, both fitted on this snapshot's traded tokens.</p>
+  </div>
+  <div class="snap" id="snapLine">DefiLlama snapshot · model radar-4</div>
+</header>
+<div class="integrity" id="integrity">Checking the board against its own numbers…</div>
+
+<section class="kpis" id="kpis"></section>
+
+<section class="ledger">
+  <h2>Protocol accounting — all <span id="ledgerN">758</span> snapshot protocols, each in exactly one group</h2>
+  <div class="bar" id="ledgerBar"></div>
+  <div class="legend" id="ledgerLegend"></div>
+</section>
+
+<section class="method">
+  <div class="card">
+    <h2>How a value is built <code>impliedValue()</code></h2>
+    <p class="formula" id="formula">implied = 10^(a + b·log10 TVL) × category × momentum × age × token odds</p>
+    <ol class="notes" id="modelNotes"></ol>
+    <p class="caveat">Say a protocol <b>records no token</b>, never that it has none: a listed protocol may still hold a token its DefiLlama record does not carry. Implied value is this entry's own claim, never make.fun's. It is not a launch prediction.</p>
+  </div>
+  <div class="card">
+    <h2>Tested, not asserted — out-of-sample evidence</h2>
+    <table class="ablation" id="ablation"></table>
+    <p class="caveat" id="oddsLine"></p>
+  </div>
+  <div class="card">
+    <h2>Traded tokens set the curve</h2>
+    <canvas id="scatter" width="520" height="300"></canvas>
+    <p class="caveat" id="scatterNote"></p>
+  </div>
+</section>
+
+<section class="controls">
+  <div class="tabs" id="tabs"></div>
+  <div class="filters">
+    <input id="q" type="search" placeholder="Search name, chain, category" aria-label="Search protocols">
+    <select id="catSel" aria-label="Category"><option value="">All categories</option></select>
+    <select id="chainSel" aria-label="Chain"><option value="">All chains</option></select>
+    <label>Deposit <select id="depSel"><option value="100">$100</option><option value="1000" selected>$1,000</option><option value="10000">$10,000</option></select></label>
+    <label>Drop share <select id="shareSel"><option value="0.035">3.5%</option><option value="0.07" selected>7%</option><option value="0.14">14%</option></select></label>
+    <button id="resetBtn" type="button">Reset</button>
+    <button id="csvBtn" type="button">CSV</button>
+  </div>
+  <p class="count" id="countLine"></p>
+</section>
+
+<section class="detail" id="detail" hidden></section>
+
+<table class="board" id="board">
+  <thead><tr>
+    <th data-sort="rank">#</th><th data-sort="name">Protocol</th><th data-sort="tvl">TVL</th>
+    <th data-sort="g7">7D</th><th data-sort="age">No token for</th><th data-sort="odds">Token odds</th>
+    <th data-sort="if">If it launches</th><th data-sort="implied">Implied value · P25–P75</th>
+    <th data-sort="net">Net of fees</th><th data-sort="hour">Net / hour</th><th>Verdict</th><th>Farm plan</th>
+  </tr></thead>
+  <tbody id="rows"></tbody>
+</table>
+
+<footer>
+  <p>Verdict: <b>FARM</b> when the expected slice clears fees by $15+ at $5+/hour; <b>MARGINAL</b> when it clears fees at all; else <b>SKIP</b>. Slice = value-if-it-launches × odds × drop share × deposit ÷ TVL. Fees = chain gas + 0.3% swap + 0.1% deposit, as the plan states per step. Plans are sized at a $1,000 deposit over 60 days.</p>
+  <p id="footLine"></p>
+</footer>
+<script src="plans.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
